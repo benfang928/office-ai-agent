@@ -136,6 +136,21 @@ Public MustInherit Class BaseChatControl
     Protected _responseToRequestMap As New Dictionary(Of String, String)()
     Protected _revisionsMap As New Dictionary(Of String, JArray)()
 
+    Protected ReadOnly Property IsWebViewReady As Boolean
+        Get
+            Return ChatBrowser IsNot Nothing AndAlso
+                Not ChatBrowser.IsDisposed AndAlso
+                ChatBrowser.CoreWebView2 IsNot Nothing
+        End Get
+    End Property
+
+    ' 公开只读访问器：供外部（如 ThisAddIn）在不破坏封装前提下检查 WebView2 状态
+    Public ReadOnly Property ChatWebView As WebView2
+        Get
+            Return ChatBrowser
+        End Get
+    End Property
+
     Protected Overrides Sub WndProc(ByRef m As Message)
         Const WM_PASTE As Integer = &H302
         If m.Msg = WM_PASTE Then
@@ -3619,6 +3634,11 @@ Public MustInherit Class BaseChatControl
     ' ExecuteJavaScript 已委托给 CodeExecutionService
     ' 添加清除特定 sheetName 的方法
     Public Async Sub ClearSelectedContentBySheetName(sheetName As String)
+        If Not IsWebViewReady Then
+            Debug.WriteLine($"[WebView2] 跳过清理选中内容，WebView2 尚未就绪: {sheetName}")
+            Return
+        End If
+
         Await ChatBrowser.CoreWebView2.ExecuteScriptAsync(
         $"clearSelectedContentBySheetName({JsonConvert.SerializeObject(sheetName)})"
     )
@@ -4793,6 +4813,11 @@ Public MustInherit Class BaseChatControl
     ' 加载本地HTML文件
     Public Async Function LoadLocalHtmlFile() As Task
         Try
+            If Not IsWebViewReady Then
+                Debug.WriteLine("[WebView2] 跳过加载本地 HTML，WebView2 尚未就绪")
+                Return
+            End If
+
             ' 检查HTML文件是否存在
             Dim htmlFilePath As String = ChatHtmlFilePath
             If File.Exists(htmlFilePath) Then
@@ -4935,6 +4960,11 @@ Public MustInherit Class BaseChatControl
 
     ' 选中内容发送到聊天区
     Public Async Sub AddSelectedContentItem(sheetName As String, address As String)
+        If Not IsWebViewReady Then
+            Debug.WriteLine($"[WebView2] 跳过添加选中内容，WebView2 尚未就绪: {sheetName}")
+            Return
+        End If
+
         Dim ctrlKey As Boolean = (Control.ModifierKeys And Keys.Control) = Keys.Control
         Await ChatBrowser.CoreWebView2.ExecuteScriptAsync(
     $"addSelectedContentItem({JsonConvert.SerializeObject(sheetName)}, {JsonConvert.SerializeObject(address)}, {ctrlKey.ToString().ToLower()})"

@@ -26,6 +26,7 @@ Public Class ChatControl
     Inherits BaseChatControl
 
     Private sheetContentItems As New Dictionary(Of String, Tuple(Of System.Windows.Forms.Label, System.Windows.Forms.Button))
+    Private _selectionHandlerAttached As Boolean = False
 
     Public Sub New()
         ' 此调用是设计师所必需的。
@@ -36,9 +37,6 @@ Public Class ChatControl
 
         '加入底部告警栏
         Me.Controls.Add(GlobalStatusStrip.StatusStrip)
-
-        ' 订阅 SelectionChange 事件 - 使用新的重载方法
-        AddHandler Globals.ThisAddIn.Application.SheetSelectionChange, AddressOf GetSelectionContentExcel
 
     End Sub
 
@@ -56,7 +54,11 @@ Public Class ChatControl
 
     ' 添加一个新的重载方法来处理Excel的事件
     Private Sub GetSelectionContentExcel(Sh As Microsoft.Office.Interop.Excel.Worksheet, Target As Microsoft.Office.Interop.Excel.Range)
-        If Me.Visible AndAlso selectedCellChecked Then
+        Try
+            If Not Me.Visible OrElse Not selectedCellChecked OrElse Not IsWebViewReady Then
+                Return
+            End If
+
             Dim sheetName As String = Sh.Name
             Dim address As String = Target.Address(False, False)
             Dim key As String = $"{sheetName}"
@@ -85,10 +87,17 @@ Public Class ChatControl
                     ClearSelectedContentBySheetName(key)
                 End If
             End If
-        End If
+        Catch ex As Exception
+            Debug.WriteLine($"Excel 选区同步到聊天框失败: {ex.Message}")
+        End Try
     End Sub
 
     Private Async Sub AddSelectedContentItem(sheetName As String, address As String)
+        If Not IsWebViewReady Then
+            Debug.WriteLine($"[Excel Chat] 跳过选区注入，WebView2 尚未就绪: {sheetName}")
+            Return
+        End If
+
         'Dim ctrlKey As Boolean = False
         Dim ctrlKey As Boolean = (Control.ModifierKeys And Keys.Control) = Keys.Control
 
@@ -103,6 +112,20 @@ Public Class ChatControl
         Await InitializeWebView2()
         InitializeWebView2Script()
         InitializeSettings()
+        AttachSelectionChangeHandlerOnce()
+    End Sub
+
+    Private Sub AttachSelectionChangeHandlerOnce()
+        If _selectionHandlerAttached Then
+            Return
+        End If
+
+        Try
+            AddHandler Globals.ThisAddIn.Application.SheetSelectionChange, AddressOf GetSelectionContentExcel
+            _selectionHandlerAttached = True
+        Catch ex As Exception
+            Debug.WriteLine($"订阅 Excel SheetSelectionChange 失败: {ex.Message}")
+        End Try
     End Sub
 
 
