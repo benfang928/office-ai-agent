@@ -9993,7 +9993,7 @@
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.8.0"
+        "ProductVersion" = "8:2.8.3"
         "Manufacturer" = "8:it235"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -10111,9 +10111,9 @@
                                                     "Transitive" = "11:FALSE"
                                                         "Keys"
                                                         {
-                                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_A749AAD5F7C74D29BE7B72ECF6555C4B"
+"{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_A749AAD5F7C74D29BE7B72ECF6555C4B"
                                                             {
-                                                            "Name" = "8:OfficeSO"
+                                                            "Name" = "8:ExcelAi"
                                                             "Condition" = "8:"
                                                             "AlwaysCreate" = "11:FALSE"
                                                             "DeleteAtUninstall" = "11:FALSE"
@@ -10185,9 +10185,9 @@
                                                     "Transitive" = "11:FALSE"
                                                         "Keys"
                                                         {
-                                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_867DDB9D0CA040F1BAA98BC3606FBFD6"
+"{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_867DDB9D0CA040F1BAA98BC3606FBFD6"
                                                             {
-                                                            "Name" = "8:OfficeSO"
+                                                            "Name" = "8:WordAi"
                                                             "Condition" = "8:"
                                                             "AlwaysCreate" = "11:FALSE"
                                                             "DeleteAtUninstall" = "11:FALSE"
@@ -10259,9 +10259,9 @@
                                                     "Transitive" = "11:FALSE"
                                                         "Keys"
                                                         {
-                                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_A97B1BCFD4084BD4AAB2BA8F2090D43C"
+"{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_A97B1BCFD4084BD4AAB2BA8F2090D43C"
                                                             {
-                                                            "Name" = "8:OfficeSO"
+                                                            "Name" = "8:PowerPointAi"
                                                             "Condition" = "8:"
                                                             "AlwaysCreate" = "11:FALSE"
                                                             "DeleteAtUninstall" = "11:FALSE"
@@ -10364,9 +10364,9 @@
                                                         }
                                                         "Values"
                                                         {
-                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_90CC8538D0824AF994E35E8B9EE91764"
+"{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_90CC8538D0824AF994E35E8B9EE91764"
                                                             {
-                                                            "Name" = "8:OfficeSO"
+                                                            "Name" = "8:WordAi"
                                                             "Condition" = "8:"
                                                             "Transitive" = "11:FALSE"
                                                             "ValueTypes" = "3:1"
@@ -10400,9 +10400,9 @@
                                                         }
                                                         "Values"
                                                         {
-                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_59BFB372886942AA9AEC7987C32B2117"
+"{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_59BFB372886942AA9AEC7987C32B2117"
                                                             {
-                                                            "Name" = "8:OfficeSO"
+                                                            "Name" = "8:PowerPointAi"
                                                             "Condition" = "8:"
                                                             "Transitive" = "11:FALSE"
                                                             "ValueTypes" = "3:1"
@@ -10436,9 +10436,9 @@
                                                         }
                                                         "Values"
                                                         {
-                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_E6742EE3FDCA4DE0BC680E23B2D03184"
+"{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_E6742EE3FDCA4DE0BC680E23B2D03184"
                                                             {
-                                                            "Name" = "8:OfficeSO"
+                                                            "Name" = "8:ExcelAi"
                                                             "Condition" = "8:"
                                                             "Transitive" = "11:FALSE"
                                                             "ValueTypes" = "3:1"

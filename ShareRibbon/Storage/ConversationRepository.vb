@@ -20,16 +20,17 @@ Public Class ConversationRepository
     ''' <summary>
     ''' 插入一条会话消息
     ''' </summary>
-    Public Shared Sub InsertMessage(sessionId As String, role As String, content As String, Optional isCollected As Boolean = False)
+    Public Shared Sub InsertMessage(sessionId As String, role As String, content As String, Optional isCollected As Boolean = False, Optional appType As String = Nothing)
         OfficeAiDatabase.EnsureInitialized()
         Using conn As New SQLiteConnection(OfficeAiDatabase.GetConnectionString())
             conn.Open()
             Using cmd As New SQLiteCommand(
-                "INSERT INTO conversation (session_id, role, content, is_collected) VALUES (@sid, @role, @content, @collected)", conn)
+                "INSERT INTO conversation (session_id, role, content, is_collected, app_type) VALUES (@sid, @role, @content, @collected, @app)", conn)
                 cmd.Parameters.AddWithValue("@sid", sessionId)
                 cmd.Parameters.AddWithValue("@role", role)
                 cmd.Parameters.AddWithValue("@content", If(content, ""))
                 cmd.Parameters.AddWithValue("@collected", If(isCollected, 1, 0))
+                cmd.Parameters.AddWithValue("@app", If(appType, ""))
                 cmd.ExecuteNonQuery()
             End Using
         End Using
@@ -91,4 +92,76 @@ Public Class ConversationRepository
         End Using
         Return list
     End Function
+
+    Public Shared Function GetSessionListByAppType(appType As String, Optional limit As Integer = 50) As List(Of SessionListItem)
+        OfficeAiDatabase.EnsureInitialized()
+        Dim list As New List(Of SessionListItem)()
+        Dim sql = "SELECT c.session_id, MIN(c.create_time) as first_time, MAX(c.create_time) as last_time, " &
+                  "(SELECT content FROM conversation c2 WHERE c2.session_id = c.session_id AND c2.role = 'user' ORDER BY c2.create_time ASC LIMIT 1) as first_user_msg, " &
+                  "(SELECT SUBSTR(content, 1, 200) FROM conversation c3 WHERE c3.session_id = c.session_id AND c3.role = 'assistant' ORDER BY c3.create_time ASC LIMIT 1) as snippet, " &
+                  "MAX(c.app_type) as app_type " &
+                  "FROM conversation c "
+        If Not String.IsNullOrEmpty(appType) Then
+            sql &= " WHERE (c.app_type = @app OR c.app_type = '' OR c.app_type IS NULL)"
+        End If
+        sql &= " GROUP BY c.session_id ORDER BY last_time DESC LIMIT @limit"
+        Using conn As New SQLiteConnection(OfficeAiDatabase.GetConnectionString())
+            conn.Open()
+            Using cmd As New SQLiteCommand(sql, conn)
+                If Not String.IsNullOrEmpty(appType) Then
+                    cmd.Parameters.AddWithValue("@app", appType)
+                End If
+                cmd.Parameters.AddWithValue("@limit", limit)
+                Using rdr = cmd.ExecuteReader()
+                    While rdr.Read()
+                        list.Add(New SessionListItem With {
+                            .SessionId = rdr.GetString(0),
+                            .FirstTime = If(rdr.IsDBNull(1), "", rdr.GetString(1)),
+                            .LastTime = If(rdr.IsDBNull(2), "", rdr.GetString(2)),
+                            .FirstUserMessage = If(rdr.IsDBNull(3), "会话", rdr.GetString(3)),
+                            .Snippet = If(rdr.IsDBNull(4), "", rdr.GetString(4)),
+                            .AppType = If(rdr.IsDBNull(5), "", rdr.GetString(5))
+                        })
+                    End While
+                End Using
+            End Using
+        End Using
+        Return list
+    End Function
+
+    Public Shared Sub DeleteSession(sessionId As String)
+        OfficeAiDatabase.EnsureInitialized()
+        Using conn As New SQLiteConnection(OfficeAiDatabase.GetConnectionString())
+            conn.Open()
+            Using cmd As New SQLiteCommand("DELETE FROM conversation WHERE session_id=@sid", conn)
+                cmd.Parameters.AddWithValue("@sid", sessionId)
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+    End Sub
+
+    Public Shared Function GetLastSessionId(appType As String) As String
+        OfficeAiDatabase.EnsureInitialized()
+        Using conn As New SQLiteConnection(OfficeAiDatabase.GetConnectionString())
+            conn.Open()
+            Dim sql = "SELECT session_id FROM conversation WHERE (app_type = @app OR app_type = '' OR app_type IS NULL) ORDER BY create_time DESC LIMIT 1"
+            Using cmd As New SQLiteCommand(sql, conn)
+                cmd.Parameters.AddWithValue("@app", appType)
+                Dim obj = cmd.ExecuteScalar()
+                If obj IsNot Nothing AndAlso Not IsDBNull(obj) Then
+                    Return obj.ToString()
+                End If
+            End Using
+        End Using
+        Return Nothing
+    End Function
+End Class
+
+Public Class SessionListItem
+    Public Property SessionId As String
+    Public Property FirstTime As String
+    Public Property LastTime As String
+    Public Property FirstUserMessage As String
+    Public Property Snippet As String
+    Public Property AppType As String
 End Class

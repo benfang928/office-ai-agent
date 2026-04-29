@@ -70,20 +70,8 @@ Public MustInherit Class BaseOfficeRibbon
     End Sub
 
     ' 教学文档按钮点击事件 - 根据应用类型跳转不同URL
-    Private Sub StudyButton_Click(sender As Object, e As RibbonControlEventArgs) Handles StudyButton.Click
-        Dim appInfo = GetApplication()
-        Dim url As String = "https://www.officeso.cn/study/"
-
-        Select Case appInfo.Type
-            Case OfficeApplicationType.Word
-                url &= "word"
-            Case OfficeApplicationType.Excel
-                url &= "excel"
-            Case OfficeApplicationType.PowerPoint
-                url &= "ppt"
-            Case Else
-                url &= "word"
-        End Select
+Private Sub StudyButton_Click(sender As Object, e As RibbonControlEventArgs) Handles StudyButton.Click
+        Dim url As String = "https://bgz0bi.yuque.com/bgz0bi/ndgx8g"
 
         Try
             System.Diagnostics.Process.Start(url)

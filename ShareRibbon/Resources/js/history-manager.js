@@ -99,14 +99,19 @@ window.historyManager = {
         }
 
         // 会话列表（含 sessionId）：按时间倒序
-        if (files[0] && files[0].sessionId !== undefined) {
+if (files[0] && files[0].sessionId !== undefined) {
             files.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
             const itemsHtml = files.map(s => {
                 const title = (s.title || '会话').replace(/'/g, "\\'");
                 const sid = (s.sessionId || '').replace(/'/g, "\\'");
-                return `<div class="history-item" data-session-id="${s.sessionId}" onclick="historyManager.loadSession('${sid}')">
-                    <div class="history-item-title">${this.escapeHtml(title)}</div>
-                    <div class="history-item-date">${this.formatSessionDate(s.createdAt)}</div>
+                const snippet = (s.snippet || '').replace(/'/g, "\\'");
+                const tooltip = this.escapeHtml(s.title || '会话') + (s.snippet ? '\n' + s.snippet.substring(0, 150) : '');
+                return `<div class="history-item" data-session-id="${s.sessionId}" title="${this.escapeHtml(tooltip)}">
+                    <div class="history-item-main" onclick="historyManager.loadSession('${sid}')">
+                        <div class="history-item-title">${this.escapeHtml(title)}</div>
+                        <div class="history-item-date">${this.formatSessionDate(s.createdAt)}</div>
+                    </div>
+                    <button class="history-item-delete" onclick="event.stopPropagation();historyManager.deleteSession('${sid}')" title="删除会话">&times;</button>
                 </div>`;
             }).join('');
             historyList.innerHTML = itemsHtml;
@@ -137,12 +142,20 @@ window.historyManager = {
         return String(createdAt).replace('T', ' ').substring(0, 19);
     },
 
-    loadSession: function (sessionId) {
+loadSession: function (sessionId) {
         this.sendMessageToVB({
             type: 'loadSession',
             sessionId: sessionId
         });
         this.closeSidebar();
+    },
+
+    deleteSession: function (sessionId) {
+        if (!confirm('确定要删除此会话吗？')) return;
+        this.sendMessageToVB({
+            type: 'deleteSession',
+            sessionId: sessionId
+        });
     },
 
     // Format filename for display

@@ -236,7 +236,12 @@ CREATE INDEX IF NOT EXISTS idx_prompt_template_scenario ON prompt_template(scena
              "UPDATE schema_version SET version = 5;"},
             {6, "ALTER TABLE atomic_memory ADD COLUMN memory_type TEXT DEFAULT 'short_term';" &
              "CREATE INDEX IF NOT EXISTS idx_atomic_memory_memory_type ON atomic_memory(memory_type);" &
-             "UPDATE schema_version SET version = 6;"}
+             "UPDATE schema_version SET version = 6;"},
+            {7, "ALTER TABLE conversation ADD COLUMN app_type TEXT DEFAULT '';" &
+             "CREATE INDEX IF NOT EXISTS idx_conversation_app_type ON conversation(app_type);" &
+             "ALTER TABLE session_summary ADD COLUMN app_type TEXT DEFAULT '';" &
+             "CREATE INDEX IF NOT EXISTS idx_session_summary_app_type ON session_summary(app_type);" &
+             "UPDATE schema_version SET version = 7;"}
         }
 
         For Each kvp In migrations.OrderBy(Function(x) x.Key)
