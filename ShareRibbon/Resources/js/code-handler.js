@@ -284,7 +284,14 @@ function renderAcceptRejectButtons(uuid) {
         btnAccept.style.backgroundColor = '#4CAF50';
         btnAccept.onclick = function () { acceptAnswer(uuid); };
 
-        footer.appendChild(btnAccept);
+        const btnReject = document.createElement('button');
+        btnReject.className = 'code-button reject-btn';
+        btnReject.style.backgroundColor = '#E9525F';
+        btnReject.textContent = '不接受，继续改进';
+        btnReject.onclick = function () { rejectAnswer(uuid); };
+
+        footer.insertBefore(btnAccept, footer.firstChild);
+        footer.insertBefore(btnReject, footer.firstChild);
     } catch (err) {
         console.error('renderAcceptRejectButtons error:', err);
     }
@@ -1424,7 +1431,7 @@ function convertJsonToExecutionPlan(uuid) {
             if (isJsonCommand(code, language)) {
                 try {
                     const json = JSON.parse(code);
-                    if (json.command) {
+                    if (json.command || (Array.isArray(json.commands) && json.commands.length > 0)) {
                         // 是有效的命令 JSON，转换为执行步骤
                         const planHtml = buildExecutionPlanHtml(json, uuid, code);
                         
@@ -1469,7 +1476,13 @@ function isJsonCommand(code, language) {
         try {
             const parsed = JSON.parse(trimmed);
             // 检查是否有 command 字段
-            return parsed && (parsed.command || (Array.isArray(parsed) && parsed[0] && parsed[0].command));
+            return !!(
+                parsed && (
+                    parsed.command ||
+                    (Array.isArray(parsed.commands) && parsed.commands.some(item => item && item.command)) ||
+                    (Array.isArray(parsed) && parsed[0] && parsed[0].command)
+                )
+            );
         } catch (e) {
             return false;
         }
@@ -1530,6 +1543,20 @@ function parseJsonToPlan(json) {
     const steps = [];
     const command = json.command || '';
     const params = json.params || {};
+    const commandList = Array.isArray(json && json.commands) ? json.commands.filter(item => item && item.command) : [];
+
+    if (commandList.length > 0) {
+        commandList.forEach(item => {
+            const childPlan = parseJsonToPlan({
+                command: item.command,
+                params: item.params || {}
+            });
+            if (childPlan && Array.isArray(childPlan.steps)) {
+                steps.push(...childPlan.steps);
+            }
+        });
+        return { steps };
+    }
 
     // 命令描述映射
     const commandDescriptions = {

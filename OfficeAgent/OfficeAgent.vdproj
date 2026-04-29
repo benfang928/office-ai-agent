@@ -3849,13 +3849,115 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1A8C37CEEED44349AA9B8CAC47568957"
+            {
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\Newtonsoft.Json.xml"
+            "TargetName" = "8:Newtonsoft.Json.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_152407A9CB6B46C4AE56C5F921A6440B"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1C709B58449A4419BBD14EF4554C1EEF"
             {
-            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\System.Buffers.xml"
-            "TargetName" = "8:System.Buffers.xml"
+            "SourcePath" = "8:..\\WordAi\\bin\\Debug\\Newtonsoft.Json.xml"
+            "TargetName" = "8:Newtonsoft.Json.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_E70B76683E0241CAA71990572F17801B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_207B2DF49DAA4B00BB3EB1C32A169A6C"
+            {
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\System.Numerics.Vectors.xml"
+            "TargetName" = "8:System.Numerics.Vectors.xml"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_23052302A56FC9565B82049F6AB6F136"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Markdig, Version=0.41.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_23052302A56FC9565B82049F6AB6F136"
+                    {
+                    "Name" = "8:Markdig.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Markdig.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_E70B76683E0241CAA71990572F17801B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_232459A2220579B3F9DCBB515F506943"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Threading.Tasks.Dataflow, Version=8.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_232459A2220579B3F9DCBB515F506943"
+                    {
+                    "Name" = "8:System.Threading.Tasks.Dataflow.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\WordAi\\bin\\Debug\\System.Threading.Tasks.Dataflow.dll"
+            "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
             "Condition" = "8:"
@@ -5323,7 +5425,7 @@
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\Markdig.dll"
+            "SourcePath" = "8:..\\WordAi\\bin\\Debug\\System.Numerics.Vectors.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
@@ -7508,7 +7610,7 @@
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:System.Memory.dll"
+            "SourcePath" = "8:..\\WordAi\\bin\\Debug\\System.Diagnostics.DiagnosticSource.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_A235B6E11ACF4199B19E7104D771D03A"
@@ -7559,8 +7661,19 @@
             }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DB700A22CA4440D29557E59EC7A68319"
             {
-            "SourcePath" = "8:..\\PowerPointAi\\bin\\Debug\\Microsoft.Web.WebView2.Core.xml"
-            "TargetName" = "8:Microsoft.Web.WebView2.Core.xml"
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Text.Json, Version=8.0.0.5, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_DA7FE1CB4BCBE99399911457E4B5CBF5"
+                    {
+                    "Name" = "8:System.Text.Json.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\WordAi\\bin\\Debug\\System.Text.Json.dll"
+            "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_49B0A40901FB4F06914B7DDBD4042A11"
             "Condition" = "8:"
@@ -8470,6 +8583,449 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E2A3C1D44F4B4B30A5D8B9018C6F1120"
+            {
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\ExcelAi.dll.config"
+            "TargetName" = "8:ExcelAi.dll.config"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E4C73C56A27E443E9D527B7B1EDCC101"
+            {
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\ShareRibbon.dll.config"
+            "TargetName" = "8:ShareRibbon.dll.config"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E5A6FB30269547B98FB856F58A648102"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:StreamJsonRpc, Version=2.22.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_E5A6FB30269547B98FB856F58A648102"
+                    {
+                    "Name" = "8:StreamJsonRpc.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\StreamJsonRpc.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E69A7D74307E4F678B5F4EF8A7D10303"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Text.Json, Version=8.0.0.5, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_E69A7D74307E4F678B5F4EF8A7D10303"
+                    {
+                    "Name" = "8:System.Text.Json.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\System.Text.Json.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E7AB8E85418F40789C6F5AF9B8E20404"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.VisualStudio.Threading, Version=17.13.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_E7AB8E85418F40789C6F5AF9B8E20404"
+                    {
+                    "Name" = "8:Microsoft.VisualStudio.Threading.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\Microsoft.VisualStudio.Threading.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E8BC9F96529A4189AD706B0AC9F30505"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_E8BC9F96529A4189AD706B0AC9F30505"
+                    {
+                    "Name" = "8:Microsoft.Bcl.AsyncInterfaces.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\Microsoft.Bcl.AsyncInterfaces.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E9CD0A1763AB429ABE817C1BDA063606"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Threading.Tasks.Dataflow, Version=8.0.0.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_E9CD0A1763AB429ABE817C1BDA063606"
+                    {
+                    "Name" = "8:System.Threading.Tasks.Dataflow.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\System.Threading.Tasks.Dataflow.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EADE1B2874BC43ABCF928D2CEB174707"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.Text.Encodings.Web, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_EADE1B2874BC43ABCF928D2CEB174707"
+                    {
+                    "Name" = "8:System.Text.Encodings.Web.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\System.Text.Encodings.Web.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EBEF2C3985CD44BCD0A39E3DFC285808"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Nerdbank.Streams, Version=2.10.74.0, Culture=neutral, PublicKeyToken=cac50344aba0a9ca, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_EBEF2C3985CD44BCD0A39E3DFC285808"
+                    {
+                    "Name" = "8:Nerdbank.Streams.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\Nerdbank.Streams.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_ECF03D4A96DE45CDE1B4AF4E0D396909"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:HtmlAgilityPack, Version=1.11.24.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_ECF03D4A96DE45CDE1B4AF4E0D396909"
+                    {
+                    "Name" = "8:HtmlAgilityPack.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\HtmlAgilityPack.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_ED014E5BA7EF46DEF2C5B05F1E4A7A0A"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Office, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_ED014E5BA7EF46DEF2C5B05F1E4A7A0A"
+                    {
+                    "Name" = "8:Office.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\Office.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EE125F6CB8F047E0F3D6C1602F5B8B0B"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.VisualStudio.Validation, Version=17.8.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_EE125F6CB8F047E0F3D6C1602F5B8B0B"
+                    {
+                    "Name" = "8:Microsoft.VisualStudio.Validation.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\Microsoft.VisualStudio.Validation.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EF23607DC9F148E1F4E7D271306C9C0C"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:MessagePack, Version=2.5.0.0, Culture=neutral, PublicKeyToken=b4a0369545f0a1be, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_EF23607DC9F148E1F4E7D271306C9C0C"
+                    {
+                    "Name" = "8:MessagePack.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\MessagePack.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F024718EDA0249E2F5F8E382417DAD0D"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:MessagePack.Annotations, Version=2.5.0.0, Culture=neutral, PublicKeyToken=b4a0369545f0a1be, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_F024718EDA0249E2F5F8E382417DAD0D"
+                    {
+                    "Name" = "8:MessagePack.Annotations.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\MessagePack.Annotations.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F135829FEB134AE3F609F493528EBE0E"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.NET.StringTools, Version=17.6.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_F135829FEB134AE3F609F493528EBE0E"
+                    {
+                    "Name" = "8:Microsoft.NET.StringTools.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\ExcelAi\\bin\\Debug\\Microsoft.NET.StringTools.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_373694DF7DBB46888AF9450767318AAD"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -8578,7 +9134,7 @@
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:FALSE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:2.8.0"
+        "ProductVersion" = "8:2.8.3"
         "Manufacturer" = "8:it235"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -8696,9 +9252,9 @@
                                                     "Transitive" = "11:FALSE"
                                                         "Keys"
                                                         {
-                                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_A749AAD5F7C74D29BE7B72ECF6555C4B"
+"{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_A749AAD5F7C74D29BE7B72ECF6555C4B"
                                                             {
-                                                            "Name" = "8:OfficeSO"
+                                                            "Name" = "8:ExcelAi"
                                                             "Condition" = "8:"
                                                             "AlwaysCreate" = "11:FALSE"
                                                             "DeleteAtUninstall" = "11:FALSE"
@@ -8770,9 +9326,9 @@
                                                     "Transitive" = "11:FALSE"
                                                         "Keys"
                                                         {
-                                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_867DDB9D0CA040F1BAA98BC3606FBFD6"
+"{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_867DDB9D0CA040F1BAA98BC3606FBFD6"
                                                             {
-                                                            "Name" = "8:OfficeSO"
+                                                            "Name" = "8:WordAi"
                                                             "Condition" = "8:"
                                                             "AlwaysCreate" = "11:FALSE"
                                                             "DeleteAtUninstall" = "11:FALSE"
@@ -8844,9 +9400,9 @@
                                                     "Transitive" = "11:FALSE"
                                                         "Keys"
                                                         {
-                                                            "{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_A97B1BCFD4084BD4AAB2BA8F2090D43C"
+"{60EA8692-D2D5-43EB-80DC-7906BF13D6EF}:_A97B1BCFD4084BD4AAB2BA8F2090D43C"
                                                             {
-                                                            "Name" = "8:OfficeSO"
+                                                            "Name" = "8:PowerPointAi"
                                                             "Condition" = "8:"
                                                             "AlwaysCreate" = "11:FALSE"
                                                             "DeleteAtUninstall" = "11:FALSE"
@@ -8949,9 +9505,9 @@
                                                         }
                                                         "Values"
                                                         {
-                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_90CC8538D0824AF994E35E8B9EE91764"
+"{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_90CC8538D0824AF994E35E8B9EE91764"
                                                             {
-                                                            "Name" = "8:OfficeSO"
+                                                            "Name" = "8:WordAi"
                                                             "Condition" = "8:"
                                                             "Transitive" = "11:FALSE"
                                                             "ValueTypes" = "3:1"
@@ -8985,9 +9541,9 @@
                                                         }
                                                         "Values"
                                                         {
-                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_59BFB372886942AA9AEC7987C32B2117"
+"{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_59BFB372886942AA9AEC7987C32B2117"
                                                             {
-                                                            "Name" = "8:OfficeSO"
+                                                            "Name" = "8:PowerPointAi"
                                                             "Condition" = "8:"
                                                             "Transitive" = "11:FALSE"
                                                             "ValueTypes" = "3:1"
@@ -9021,9 +9577,9 @@
                                                         }
                                                         "Values"
                                                         {
-                                                            "{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_E6742EE3FDCA4DE0BC680E23B2D03184"
+"{ADCFDA98-8FDD-45E4-90BC-E3D20B029870}:_E6742EE3FDCA4DE0BC680E23B2D03184"
                                                             {
-                                                            "Name" = "8:OfficeSO"
+                                                            "Name" = "8:ExcelAi"
                                                             "Condition" = "8:"
                                                             "Transitive" = "11:FALSE"
                                                             "ValueTypes" = "3:1"

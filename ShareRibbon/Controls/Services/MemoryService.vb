@@ -80,9 +80,9 @@ Public Class MemoryService
     ''' <summary>
     ''' 获取近期会话摘要
     ''' </summary>
-    Public Shared Function GetRecentSessionSummaries(Optional limit As Integer? = Nothing) As List(Of SessionSummaryRecord)
+Public Shared Function GetRecentSessionSummaries(Optional limit As Integer? = Nothing, Optional appType As String = Nothing) As List(Of SessionSummaryRecord)
         Dim n = If(limit.HasValue, limit.Value, MemoryConfig.SessionSummaryLimit)
-        Return MemoryRepository.GetRecentSessionSummaries(n)
+        Return MemoryRepository.GetRecentSessionSummaries(n, appType)
     End Function
 
     ''' <summary>
@@ -260,7 +260,7 @@ Public Class MemoryService
     ''' <summary>
     ''' 插入会话摘要
     ''' </summary>
-    Public Shared Sub SaveSessionSummary(sessionId As String, title As String, snippet As String)
-        MemoryRepository.InsertSessionSummary(sessionId, title, snippet)
+Public Shared Sub SaveSessionSummary(sessionId As String, title As String, snippet As String, Optional appType As String = Nothing)
+        MemoryRepository.InsertSessionSummary(sessionId, title, snippet, appType)
     End Sub
 End Class

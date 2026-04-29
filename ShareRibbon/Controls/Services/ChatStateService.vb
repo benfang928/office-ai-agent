@@ -44,6 +44,7 @@ Public Class ChatStateService
 
         ' 当前会话 ID（用于持久化到 conversation 表）
         Private _currentSessionId As String = Nothing
+        Private _currentAppType As String = Nothing
 
 #Region "属性"
 
@@ -131,13 +132,22 @@ Public Class ChatStateService
         ''' <summary>
         ''' 当前会话 ID，新建会话时生成 GUID
         ''' </summary>
-        Public ReadOnly Property CurrentSessionId As String
+Public ReadOnly Property CurrentSessionId As String
             Get
                 If String.IsNullOrEmpty(_currentSessionId) Then
                     _currentSessionId = Guid.NewGuid().ToString()
                 End If
                 Return _currentSessionId
             End Get
+        End Property
+
+        Public Property CurrentAppType As String
+            Get
+                Return If(String.IsNullOrEmpty(_currentAppType), "Excel", _currentAppType)
+            End Get
+            Set(value As String)
+                _currentAppType = value
+            End Set
         End Property
 
 #End Region
@@ -223,7 +233,7 @@ Public Class ChatStateService
         ''' <summary>
         ''' 切换到指定会话：从 conversation 表加载该会话消息并设为当前会话
         ''' </summary>
-        Public Sub SwitchToSession(sessionId As String)
+        Public Sub SwitchToSession(sessionId As String, Optional skipTrim As Boolean = True)
             If String.IsNullOrEmpty(sessionId) Then Return
             _currentSessionId = sessionId
             _historyMessages.Clear()
@@ -243,7 +253,7 @@ Public Class ChatStateService
                         .Timestamp = ts
                     })
                 Next
-                ManageHistorySize()
+                If Not skipTrim Then ManageHistorySize()
             Catch ex As Exception
                 Debug.WriteLine("SwitchToSession 加载消息失败: " & ex.Message)
             End Try

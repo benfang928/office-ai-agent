@@ -386,13 +386,20 @@ Public Class MemoryRepository
     ''' <summary>
     ''' 获取近期会话摘要
     ''' </summary>
-    Public Shared Function GetRecentSessionSummaries(limit As Integer) As List(Of SessionSummaryRecord)
+Public Shared Function GetRecentSessionSummaries(limit As Integer, Optional appType As String = Nothing) As List(Of SessionSummaryRecord)
         OfficeAiDatabase.EnsureInitialized()
         Dim list As New List(Of SessionSummaryRecord)()
+        Dim sql = "SELECT id, session_id, title, snippet, created_at FROM session_summary WHERE 1=1"
+        If Not String.IsNullOrEmpty(appType) Then
+            sql &= " AND (app_type = @app OR app_type = '' OR app_type IS NULL)"
+        End If
+        sql &= " ORDER BY created_at DESC LIMIT @limit"
         Using conn As New SQLiteConnection(OfficeAiDatabase.GetConnectionString())
             conn.Open()
-            Using cmd As New SQLiteCommand(
-                "SELECT id, session_id, title, snippet, created_at FROM session_summary ORDER BY created_at DESC LIMIT @limit", conn)
+            Using cmd As New SQLiteCommand(sql, conn)
+                If Not String.IsNullOrEmpty(appType) Then
+                    cmd.Parameters.AddWithValue("@app", appType)
+                End If
                 cmd.Parameters.AddWithValue("@limit", limit)
                 Using rdr = cmd.ExecuteReader()
                     While rdr.Read()
@@ -413,15 +420,27 @@ Public Class MemoryRepository
     ''' <summary>
     ''' 插入会话摘要
     ''' </summary>
-    Public Shared Sub InsertSessionSummary(sessionId As String, title As String, snippet As String)
+    Public Shared Sub InsertSessionSummary(sessionId As String, title As String, snippet As String, Optional appType As String = Nothing)
         OfficeAiDatabase.EnsureInitialized()
         Using conn As New SQLiteConnection(OfficeAiDatabase.GetConnectionString())
             conn.Open()
             Using cmd As New SQLiteCommand(
-                "INSERT INTO session_summary (session_id, title, snippet) VALUES (@sid, @title, @snippet)", conn)
+                "INSERT INTO session_summary (session_id, title, snippet, app_type) VALUES (@sid, @title, @snippet, @app)", conn)
                 cmd.Parameters.AddWithValue("@sid", sessionId)
                 cmd.Parameters.AddWithValue("@title", If(title, ""))
                 cmd.Parameters.AddWithValue("@snippet", If(snippet, ""))
+                cmd.Parameters.AddWithValue("@app", If(appType, ""))
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+    End Sub
+
+    Public Shared Sub DeleteSessionSummary(sessionId As String)
+        OfficeAiDatabase.EnsureInitialized()
+        Using conn As New SQLiteConnection(OfficeAiDatabase.GetConnectionString())
+            conn.Open()
+            Using cmd As New SQLiteCommand("DELETE FROM session_summary WHERE session_id=@sid", conn)
+                cmd.Parameters.AddWithValue("@sid", sessionId)
                 cmd.ExecuteNonQuery()
             End Using
         End Using

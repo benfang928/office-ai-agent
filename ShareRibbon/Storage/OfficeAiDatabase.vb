@@ -237,7 +237,12 @@ CREATE INDEX IF NOT EXISTS idx_prompt_template_scenario ON prompt_template(scena
             {6, "ALTER TABLE atomic_memory ADD COLUMN memory_type TEXT DEFAULT 'short_term';" &
              "CREATE INDEX IF NOT EXISTS idx_atomic_memory_memory_type ON atomic_memory(memory_type);" &
              "UPDATE schema_version SET version = 6;"},
-            {7, "CREATE TABLE IF NOT EXISTS skills_usage (" &
+            {7, "ALTER TABLE conversation ADD COLUMN app_type TEXT DEFAULT '';" &
+             "CREATE INDEX IF NOT EXISTS idx_conversation_app_type ON conversation(app_type);" &
+             "ALTER TABLE session_summary ADD COLUMN app_type TEXT DEFAULT '';" &
+             "CREATE INDEX IF NOT EXISTS idx_session_summary_app_type ON session_summary(app_type);" &
+             "UPDATE schema_version SET version = 7;"}
+            {8, "CREATE TABLE IF NOT EXISTS skills_usage (" &
              "id INTEGER PRIMARY KEY AUTOINCREMENT," &
              "skill_name TEXT NOT NULL," &
              "usage_count INTEGER DEFAULT 0," &
@@ -249,7 +254,7 @@ CREATE INDEX IF NOT EXISTS idx_prompt_template_scenario ON prompt_template(scena
              ");" &
              "CREATE UNIQUE INDEX IF NOT EXISTS idx_skills_usage_name ON skills_usage(skill_name);" &
              "UPDATE schema_version SET version = 7;"},
-            {8, "CREATE TABLE IF NOT EXISTS atomic_memory_new (" &
+            {9, "CREATE TABLE IF NOT EXISTS atomic_memory_new (" &
              "id INTEGER PRIMARY KEY AUTOINCREMENT," &
              "timestamp INTEGER NOT NULL," &
              "content TEXT NOT NULL," &

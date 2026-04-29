@@ -351,8 +351,10 @@ Public Class ThisAddIn
         If chatTaskPane Is Nothing Then Return
         chatTaskPane.Visible = True
         If loadChatHtml Then
-            loadChatHtml = False
-            Await chatControl.LoadLocalHtmlFile()
+            If chatControl IsNot Nothing AndAlso chatControl.ChatWebView IsNot Nothing AndAlso chatControl.ChatWebView.CoreWebView2 IsNot Nothing Then
+                loadChatHtml = False
+                Await chatControl.LoadLocalHtmlFile()
+            End If
         End If
     End Sub
 

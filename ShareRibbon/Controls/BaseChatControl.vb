@@ -218,19 +218,31 @@ Public MustInherit Class BaseChatControl
         End Get
     End Property
 
-    Private ReadOnly Property allPlainMarkdownBuffer As StringBuilder
+    Protected ReadOnly Property IsWebViewReady As Boolean
         Get
-            Return _chatStateService.PlainMarkdownBuffer
+            Return ChatBrowser IsNot Nothing AndAlso
+                Not ChatBrowser.IsDisposed AndAlso
+                ChatBrowser.CoreWebView2 IsNot Nothing
         End Get
     End Property
 
-    Protected ReadOnly Property _responseToRequestMap As Dictionary(Of String, String)
+    ' 公开只读访问器：供外部（如 ThisAddIn）在不破坏封装前提下检查 WebView2 状态
+    Public ReadOnly Property ChatWebView As WebView2
         Get
-            Return _chatStateService.ResponseToRequestMap
+            Return ChatBrowser
         End Get
     End Property
 
-    Protected _revisionsMap As New Dictionary(Of String, JArray)()
+    Protected Overrides Sub WndProc(ByRef m As Message)
+        Const WM_PASTE As Integer = &H302
+        If m.Msg = WM_PASTE Then
+            If Clipboard.ContainsText() Then
+                Dim txt As String = Clipboard.GetText()
+            End If
+            Return
+        End If
+        MyBase.WndProc(m)
+    End Sub
 
     Protected Async Function InitializeWebView2() As Task
         Try
@@ -504,8 +516,9 @@ Public MustInherit Class BaseChatControl
             topicRandomness = ChatSettings.topicRandomness
             settingsScrollChecked = ChatSettings.settingsScrollChecked
 
-            ' 设置Office应用类型（用于前端区分Word/PPT/Excel）
+' 设置Office应用类型（用于前端区分Word/PPT/Excel）
             Dim appType = GetOfficeAppType()
+            _chatStateService.CurrentAppType = appType
 
             ' 将设置发送到前端
             Dim js As String = $"
@@ -535,9 +548,40 @@ Public MustInherit Class BaseChatControl
             document.getElementById('scrollChecked').checked = {ChatSettings.settingsScrollChecked.ToString().ToLower()};
             document.getElementById('selectedCell').checked = {ChatSettings.selectedCellChecked.ToString().ToLower()};
         "
-            ExecuteJavaScriptAsyncJS(js)
+ExecuteJavaScriptAsyncJS(js)
+
+            RestoreLastSession(appType)
         Catch ex As Exception
             Debug.WriteLine($"初始化设置失败: {ex.Message}")
+        End Try
+    End Sub
+
+    Private Async Sub RestoreLastSession(appType As String)
+        Try
+            Dim lastSessionId = ConversationRepository.GetLastSessionId(appType)
+            Debug.WriteLine($"[RestoreLastSession] appType={appType}, lastSessionId={If(lastSessionId, "(null)")}")
+            If String.IsNullOrEmpty(lastSessionId) Then Return
+
+            _chatStateService.SwitchToSession(lastSessionId)
+            Debug.WriteLine($"[RestoreLastSession] SwitchToSession done, HistoryMessages.Count={_chatStateService.HistoryMessages.Count}")
+
+            Dim messages As New List(Of Object)()
+            For Each m In _chatStateService.HistoryMessages
+                If m.role = "user" OrElse m.role = "assistant" Then
+                    messages.Add(New With {.role = m.role, .content = m.content, .createTime = m.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")})
+                End If
+            Next
+            Debug.WriteLine($"[RestoreLastSession] filtered messages count={messages.Count}")
+
+            If messages.Count > 0 Then
+                Dim jsonResult As String = JsonConvert.SerializeObject(messages)
+                Await Task.Delay(800)
+                Dim jsCall = $"if(typeof setChatMessages==='function')setChatMessages({jsonResult});"
+                Await ExecuteJavaScriptAsyncJS(jsCall)
+                Debug.WriteLine($"[RestoreLastSession] 已恢复上次会话，共 {messages.Count} 条消息")
+            End If
+        Catch ex As Exception
+            Debug.WriteLine($"[RestoreLastSession] 失败: {ex.Message}{Environment.NewLine}{ex.StackTrace}")
         End Try
     End Sub
 
@@ -565,8 +609,10 @@ Public MustInherit Class BaseChatControl
                     HandleGetSessionList()
                 Case "loadSession"
                     HandleLoadSession(jsonDoc)
-                Case "newSession"
+Case "newSession"
                     HandleNewSession()
+                Case "deleteSession"
+                    HandleDeleteSession(jsonDoc)
                 Case "getPromptTemplates"
                     HandleGetPromptTemplates(jsonDoc)
                 Case "savePromptTemplate"
@@ -1083,16 +1129,89 @@ Public MustInherit Class BaseChatControl
         HistorySessionSvc.HandleOpenHistoryFile(jsonDoc)
     End Sub
 
-    Protected Sub HandleGetSessionList()
-        HistorySessionSvc.HandleGetSessionList()
+    ''' <summary>
+    ''' 获取近期会话列表（来自 session_summary），供历史侧边栏展示
+    ''' </summary>
+ Protected Sub HandleGetSessionList()
+        Try
+            Dim limit As Integer = 50
+            Dim appType = GetOfficeAppType()
+            Dim sessions = ConversationRepository.GetSessionListByAppType(appType, limit)
+            Dim list As New List(Of Object)()
+            For Each s In sessions
+                list.Add(New With {
+                    .sessionId = s.SessionId,
+                    .title = If(String.IsNullOrEmpty(s.FirstUserMessage), "会话", s.FirstUserMessage),
+                    .snippet = If(String.IsNullOrEmpty(s.Snippet), "", s.Snippet),
+                    .createdAt = If(String.IsNullOrEmpty(s.LastTime), s.FirstTime, s.LastTime),
+                    .fileName = s.FirstUserMessage,
+                    .fullPath = s.SessionId,
+                    .lastModified = If(String.IsNullOrEmpty(s.LastTime), s.FirstTime, s.LastTime)
+                })
+            Next
+            Dim jsonResult As String = JsonConvert.SerializeObject(list)
+            ExecuteJavaScriptAsyncJS($"setHistoryFilesList({jsonResult});")
+        Catch ex As Exception
+            Debug.WriteLine("HandleGetSessionList 失败: " & ex.Message)
+            ExecuteJavaScriptAsyncJS("setHistoryFilesList([]);")
+        End Try
     End Sub
 
-    Protected Sub HandleLoadSession(jsonDoc As JObject)
-        HistorySessionSvc.HandleLoadSession(jsonDoc)
+    ''' <summary>
+    ''' 加载指定会话到当前 Chat 并渲染消息
+    ''' </summary>
+Protected Sub HandleLoadSession(jsonDoc As JObject)
+        Try
+            Dim sessionId As String = jsonDoc("sessionId")?.ToString()
+            If String.IsNullOrEmpty(sessionId) Then Return
+            _chatStateService.SwitchToSession(sessionId)
+            Dim messages As New List(Of Object)()
+            For Each m In _chatStateService.HistoryMessages
+                If m.role = "user" OrElse m.role = "assistant" Then
+                    messages.Add(New With {.role = m.role, .content = m.content, .createTime = m.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")})
+                End If
+            Next
+            Dim jsonResult As String = JsonConvert.SerializeObject(messages)
+            ExecuteJavaScriptAsyncJS($"if(typeof setChatMessages==='function')setChatMessages({jsonResult});")
+            GlobalStatusStrip.ShowInfo("已加载历史会话")
+        Catch ex As Exception
+            Debug.WriteLine("HandleLoadSession 失败: " & ex.Message)
+            GlobalStatusStrip.ShowWarning("加载会话失败")
+        End Try
     End Sub
 
-    Protected Sub HandleNewSession()
-        HistorySessionSvc.HandleNewSession()
+    ''' <summary>
+    ''' 新建会话：清空状态并清空聊天区域
+    ''' </summary>
+Protected Sub HandleNewSession()
+        Try
+            _chatStateService.StartNewSession()
+            ExecuteJavaScriptAsyncJS("if(typeof clearChatContent==='function')clearChatContent();")
+            GlobalStatusStrip.ShowInfo("已新建会话")
+        Catch ex As Exception
+            Debug.WriteLine("HandleNewSession 失败: " & ex.Message)
+        End Try
+    End Sub
+
+    Protected Sub HandleDeleteSession(jsonDoc As JObject)
+        Try
+            Dim sessionId As String = jsonDoc("sessionId")?.ToString()
+            If String.IsNullOrEmpty(sessionId) Then Return
+            ConversationRepository.DeleteSession(sessionId)
+            Try
+                MemoryRepository.DeleteSessionSummary(sessionId)
+            Catch ex2 As Exception
+                Debug.WriteLine("DeleteSessionSummary 失败: " & ex2.Message)
+            End Try
+            If _chatStateService.CurrentSessionId = sessionId Then
+                _chatStateService.StartNewSession()
+                ExecuteJavaScriptAsyncJS("if(typeof clearChatContent==='function')clearChatContent();")
+            End If
+            HandleGetSessionList()
+            GlobalStatusStrip.ShowInfo("已删除会话")
+        Catch ex As Exception
+            Debug.WriteLine("HandleDeleteSession 失败: " & ex.Message)
+        End Try
     End Sub
 
 #Region "阶段二：配置面板（场景/Skills、记忆管理）"
@@ -2523,6 +2642,11 @@ Public MustInherit Class BaseChatControl
     ' ExecuteJavaScript 已委托给 CodeExecutionService
     ' 添加清除特定 sheetName 的方法
     Public Async Sub ClearSelectedContentBySheetName(sheetName As String)
+        If Not IsWebViewReady Then
+            Debug.WriteLine($"[WebView2] 跳过清理选中内容，WebView2 尚未就绪: {sheetName}")
+            Return
+        End If
+
         Await ChatBrowser.CoreWebView2.ExecuteScriptAsync(
         $"clearSelectedContentBySheetName({JsonConvert.SerializeObject(sheetName)})"
     )
@@ -3001,6 +3125,11 @@ Public MustInherit Class BaseChatControl
     ' 加载本地HTML文件
     Public Async Function LoadLocalHtmlFile() As Task
         Try
+            If Not IsWebViewReady Then
+                Debug.WriteLine("[WebView2] 跳过加载本地 HTML，WebView2 尚未就绪")
+                Return
+            End If
+
             ' 检查HTML文件是否存在
             Dim htmlFilePath As String = ChatHtmlFilePath
             If File.Exists(htmlFilePath) Then
@@ -3132,6 +3261,11 @@ Public MustInherit Class BaseChatControl
 
     ' 选中内容发送到聊天区
     Public Async Sub AddSelectedContentItem(sheetName As String, address As String)
+        If Not IsWebViewReady Then
+            Debug.WriteLine($"[WebView2] 跳过添加选中内容，WebView2 尚未就绪: {sheetName}")
+            Return
+        End If
+
         Dim ctrlKey As Boolean = (Control.ModifierKeys And Keys.Control) = Keys.Control
         Await ChatBrowser.CoreWebView2.ExecuteScriptAsync(
     $"addSelectedContentItem({JsonConvert.SerializeObject(sheetName)}, {JsonConvert.SerializeObject(address)}, {ctrlKey.ToString().ToLower()})"
