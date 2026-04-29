@@ -47,6 +47,18 @@
         </div>
     </div>
 
+    <!-- Agent 模式指示器 -->
+    <div id="agent-mode-indicator" style="display:none; padding: 6px 16px; background: linear-gradient(90deg, #4a6fa5 0%, #3d5a7c 100%); color: white; font-size: 12px; align-items: center; gap: 8px;">
+        <span class="agent-dot" style="width: 8px; height: 8px; background: #4ade80; border-radius: 50%; display: inline-block; animation: pulse 2s infinite;"></span>
+        <span>Agent 模式运行中</span>
+        <style>
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.4; }
+            }
+        </style>
+    </div>
+
     <div id="chat-container">
         <!-- message content list -->
     </div>
@@ -191,12 +203,10 @@
                         </svg>
                     </button>
 
-                    <label class="input-option">
-                        <select id="chatMode" onchange="chatModeChanged(this)">
-                            <option value="chat">Chat模式</option>
-                            <option value="agent">Agent模式</option>
-                        </select>
-                    </label>
+                    <span class="input-option" id="smart-mode-indicator" style="display:flex; align-items:center; gap:6px; padding:6px 12px; background:linear-gradient(90deg, #4a6fa5 0%, #3d5a7c 100%); color:white; border-radius:6px; font-size:12px; font-weight:500;">
+                        <span style="width:8px; height:8px; background:#4ade80; border-radius:50%; display:inline-block; animation:pulse 2s infinite;"></span>
+                        智能模式
+                    </span>
 
                     <!-- 新增：附件按钮 -->
                     <button id="attach-file-button" title="添加附件" style="padding: 4px;">
@@ -413,6 +423,8 @@
     <script src="http://officeai.local/js/revision-manager.js"></script>
     <script src="http://officeai.local/js/autocomplete.js"></script>
     <script src="http://officeai.local/js/intent-preview.js"></script>
+    <script src="http://officeai.local/js/agent-protocol.js"></script>
+    <script src="http://officeai.local/js/agent-card.js"></script>
     <script src="http://officeai.local/js/ralph-loop.js"></script>
     <script src="http://officeai.local/js/ralph-agent.js"></script>
     <script src="http://officeai.local/js/model-switcher.js"></script>

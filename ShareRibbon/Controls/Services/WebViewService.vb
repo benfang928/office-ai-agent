@@ -221,7 +221,7 @@ Public Class WebViewService
         ''' <summary>
         ''' 初始化前端设置
         ''' </summary>
-        Public Sub InitializeSettings(chatSettings As ChatSettings)
+        Public Async Sub InitializeSettings(chatSettings As ChatSettings)
             Dim js As String = $"
             document.getElementById('topic-randomness').value = '{chatSettings.topicRandomness}';
             document.getElementById('topic-randomness-value').textContent = '{chatSettings.topicRandomness}';
@@ -231,15 +231,10 @@ Public Class WebViewService
             document.getElementById('settings-selected-cell').checked = {chatSettings.selectedCellChecked.ToString().ToLower()};
             document.getElementById('settings-executecode-preview').checked = {chatSettings.executecodePreviewChecked.ToString().ToLower()};
             
-            var selectElement = document.getElementById('chatMode');
-            if (selectElement) {{
-                selectElement.value = '{chatSettings.chatMode}';
-            }}
-            
             document.getElementById('scrollChecked').checked = {chatSettings.settingsScrollChecked.ToString().ToLower()};
             document.getElementById('selectedCell').checked = {chatSettings.selectedCellChecked.ToString().ToLower()};
             "
-            ExecuteScriptAsync(js)
+            Await ExecuteScriptAsync(js)
         End Sub
 
         ''' <summary>

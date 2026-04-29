@@ -12,9 +12,6 @@ Imports System.Windows.Forms
 Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
 Imports ShareRibbon.ConfigManager
-Imports Services.SkillsService
-Imports Services.SkillsDirectoryService
-Imports Services.SkillsFileDefinition
 Imports Markdig
 Imports Microsoft.Web.WebView2.WinForms
 Imports Microsoft.Web.WebView2.Core
@@ -43,6 +40,7 @@ Public Class ConfigApiForm
     Private cloudChatModelCheckedListBox As CheckedListBox
     Private cloudEmbeddingModelCheckedListBox As CheckedListBox
     Private cloudRefreshModelsButton As Button
+    Private cloudAddModelButton As Button
     Private cloudTranslateCheckBox As CheckBox
     Private cloudSaveButton As Button
     Private cloudDeleteButton As Button
@@ -56,6 +54,7 @@ Public Class ConfigApiForm
     Private localChatModelCheckedListBox As CheckedListBox
     Private localEmbeddingModelCheckedListBox As CheckedListBox
     Private localRefreshModelsButton As Button
+    Private localAddModelButton As Button
     Private localTranslateCheckBox As CheckBox
     Private localSaveButton As Button
     Private localDeleteButton As Button
@@ -226,6 +225,7 @@ Public Class ConfigApiForm
         cloudChatModelCheckedListBox.Size = New Size(285, 180)
         cloudChatModelCheckedListBox.CheckOnClick = True
         AddHandler cloudChatModelCheckedListBox.ItemCheck, AddressOf CloudChatModelCheckedListBox_ItemCheck
+        AddHandler cloudChatModelCheckedListBox.MouseDown, AddressOf CloudModelList_MouseDown
         cloudTab.Controls.Add(cloudChatModelCheckedListBox)
 
         ' 向量模型列表标题
@@ -241,16 +241,24 @@ Public Class ConfigApiForm
         cloudEmbeddingModelCheckedListBox.Size = New Size(285, 180)
         cloudEmbeddingModelCheckedListBox.CheckOnClick = True
         AddHandler cloudEmbeddingModelCheckedListBox.ItemCheck, AddressOf CloudEmbeddingModelCheckedListBox_ItemCheck
+        AddHandler cloudEmbeddingModelCheckedListBox.MouseDown, AddressOf CloudModelList_MouseDown
         cloudTab.Controls.Add(cloudEmbeddingModelCheckedListBox)
 
-        ' 刷新模型按钮
+        ' 刷新模型按钮（向量模型标题右侧，与标题同行）
         cloudRefreshModelsButton = New Button()
         cloudRefreshModelsButton.Text = "刷新列表"
-        cloudRefreshModelsButton.Location = New Point(rightX + 450, 145)
-        cloudRefreshModelsButton.Size = New Size(140, 25)
+        cloudRefreshModelsButton.Location = New Point(rightX + 400, 148)
+        cloudRefreshModelsButton.Size = New Size(85, 25)
         AddHandler cloudRefreshModelsButton.Click, AddressOf CloudRefreshModelsButton_Click
         cloudTab.Controls.Add(cloudRefreshModelsButton)
 
+        ' 手动添加模型按钮（刷新列表右侧，同行排列）
+        cloudAddModelButton = New Button()
+        cloudAddModelButton.Text = "添加模型"
+        cloudAddModelButton.Location = New Point(rightX + 490, 148)
+        cloudAddModelButton.Size = New Size(85, 25)
+        AddHandler cloudAddModelButton.Click, AddressOf CloudAddModelButton_Click
+        cloudTab.Controls.Add(cloudAddModelButton)
 
         ' 用于翻译复选框
         cloudTranslateCheckBox = New CheckBox()
@@ -276,11 +284,12 @@ Public Class ConfigApiForm
         AddHandler cloudSaveButton.Click, AddressOf CloudSaveButton_Click
         cloudTab.Controls.Add(cloudSaveButton)
 
-        ' 删除按钮
+        ' 删除按钮（初始禁用，选中非预置配置时启用）
         cloudDeleteButton = New Button()
         cloudDeleteButton.Text = "删除"
         cloudDeleteButton.Location = New Point(rightX + 460, 410)
         cloudDeleteButton.Size = New Size(130, 35)
+        cloudDeleteButton.Enabled = False
         AddHandler cloudDeleteButton.Click, AddressOf CloudDeleteButton_Click
         cloudTab.Controls.Add(cloudDeleteButton)
     End Sub
@@ -370,6 +379,7 @@ Public Class ConfigApiForm
         localChatModelCheckedListBox.Size = New Size(285, 130)
         localChatModelCheckedListBox.CheckOnClick = True
         AddHandler localChatModelCheckedListBox.ItemCheck, AddressOf LocalChatModelCheckedListBox_ItemCheck
+        AddHandler localChatModelCheckedListBox.MouseDown, AddressOf LocalModelList_MouseDown
         localTab.Controls.Add(localChatModelCheckedListBox)
 
         ' 向量模型列表标题
@@ -385,15 +395,24 @@ Public Class ConfigApiForm
         localEmbeddingModelCheckedListBox.Size = New Size(285, 130)
         localEmbeddingModelCheckedListBox.CheckOnClick = True
         AddHandler localEmbeddingModelCheckedListBox.ItemCheck, AddressOf LocalEmbeddingModelCheckedListBox_ItemCheck
+        AddHandler localEmbeddingModelCheckedListBox.MouseDown, AddressOf LocalModelList_MouseDown
         localTab.Controls.Add(localEmbeddingModelCheckedListBox)
 
-        ' 刷新模型按钮
+        ' 刷新模型按钮（向量模型标题右侧，与标题同行）
         localRefreshModelsButton = New Button()
         localRefreshModelsButton.Text = "刷新列表"
-        localRefreshModelsButton.Location = New Point(rightX + 450, 190)
-        localRefreshModelsButton.Size = New Size(140, 25)
+        localRefreshModelsButton.Location = New Point(rightX + 400, 193)
+        localRefreshModelsButton.Size = New Size(85, 25)
         AddHandler localRefreshModelsButton.Click, AddressOf LocalRefreshModelsButton_Click
         localTab.Controls.Add(localRefreshModelsButton)
+
+        ' 手动添加模型按钮（刷新列表右侧，同行排列）
+        localAddModelButton = New Button()
+        localAddModelButton.Text = "添加模型"
+        localAddModelButton.Location = New Point(rightX + 490, 193)
+        localAddModelButton.Size = New Size(85, 25)
+        AddHandler localAddModelButton.Click, AddressOf LocalAddModelButton_Click
+        localTab.Controls.Add(localAddModelButton)
 
         ' 用于翻译复选框
         localTranslateCheckBox = New CheckBox()
@@ -419,11 +438,12 @@ Public Class ConfigApiForm
         AddHandler localSaveButton.Click, AddressOf LocalSaveButton_Click
         localTab.Controls.Add(localSaveButton)
 
-        ' 删除按钮
+        ' 删除按钮（初始禁用，选中非预置配置时启用）
         localDeleteButton = New Button()
         localDeleteButton.Text = "删除"
         localDeleteButton.Location = New Point(rightX + 460, 410)
         localDeleteButton.Size = New Size(130, 35)
+        localDeleteButton.Enabled = False
         AddHandler localDeleteButton.Click, AddressOf LocalDeleteButton_Click
         localTab.Controls.Add(localDeleteButton)
     End Sub
@@ -1175,7 +1195,9 @@ Public Class ConfigApiForm
         cloudEmbeddingModelCheckedListBox.Items.Clear()
         If currentCloudConfig Is Nothing Then Return
 
-        For Each model In currentCloudConfig.model
+        Dim sortedModels = SortModelsByVersion(currentCloudConfig.model)
+
+        For Each model In sortedModels
             If model.modelType = ModelType.Chat Then
                 cloudChatModelCheckedListBox.Items.Add(model, model.selected)
             ElseIf model.modelType = ModelType.Embedding Then
@@ -1403,9 +1425,12 @@ Public Class ConfigApiForm
     End Sub
 
     Private Sub CloudDeleteButton_Click(sender As Object, e As EventArgs)
-        If currentCloudConfig Is Nothing Then Return
+        If currentCloudConfig Is Nothing Then
+            GlobalStatusStripAll.ShowWarning("请先在列表中选择要删除的配置")
+            Return
+        End If
         If currentCloudConfig.isPreset Then
-            MessageBox.Show("预置配置不可删除", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            GlobalStatusStripAll.ShowWarning("预置配置不可删除")
             Return
         End If
 
@@ -1433,6 +1458,71 @@ Public Class ConfigApiForm
         cloudProviderListBox.SelectedItem = newConfig
     End Sub
 
+    Private Sub CloudAddModelButton_Click(sender As Object, e As EventArgs)
+        If currentCloudConfig Is Nothing Then Return
+
+        Dim modelName = InputBox("请输入模型名称：", "手动添加模型", "")
+        If String.IsNullOrWhiteSpace(modelName) Then Return
+
+        modelName = modelName.Trim()
+
+        Dim existing = currentCloudConfig.model.FirstOrDefault(Function(m) m.modelName = modelName)
+        If existing IsNot Nothing Then
+            MessageBox.Show("该模型已存在", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return
+        End If
+
+        currentCloudConfig.model.Add(New ConfigItemModel() With {
+            .modelName = modelName,
+            .displayName = modelName,
+            .modelType = ModelType.Chat
+        })
+
+        RefreshCloudModelLists()
+        SaveConfig()
+        MessageBox.Show($"已添加模型：{modelName}", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    ''' <summary>
+    ''' 云端模型列表右键菜单 — 支持删除模型
+    ''' </summary>
+    Private Sub CloudModelList_MouseDown(sender As Object, e As MouseEventArgs)
+        If e.Button <> MouseButtons.Right Then Return
+        Dim list = CType(sender, CheckedListBox)
+        Dim index = list.IndexFromPoint(e.Location)
+        If index < 0 OrElse index >= list.Items.Count Then Return
+
+        Dim model = CType(list.Items(index), ConfigItemModel)
+        Dim result = MessageBox.Show($"确定删除模型「{model.modelName}」？", "删除模型", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+        If result <> DialogResult.Yes Then Return
+
+        If currentCloudConfig IsNot Nothing Then
+            currentCloudConfig.model.Remove(model)
+            RefreshCloudModelLists()
+            SaveConfig()
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' 本地模型列表右键菜单 — 支持删除模型
+    ''' </summary>
+    Private Sub LocalModelList_MouseDown(sender As Object, e As MouseEventArgs)
+        If e.Button <> MouseButtons.Right Then Return
+        Dim list = CType(sender, CheckedListBox)
+        Dim index = list.IndexFromPoint(e.Location)
+        If index < 0 OrElse index >= list.Items.Count Then Return
+
+        Dim model = CType(list.Items(index), ConfigItemModel)
+        Dim result = MessageBox.Show($"确定删除模型「{model.modelName}」？", "删除模型", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+        If result <> DialogResult.Yes Then Return
+
+        If currentLocalConfig IsNot Nothing Then
+            currentLocalConfig.model.Remove(model)
+            RefreshLocalModelLists()
+            SaveConfig()
+        End If
+    End Sub
+
 #End Region
 
 #Region "本地模型事件处理"
@@ -1450,7 +1540,7 @@ Public Class ConfigApiForm
 
         RefreshLocalModelLists()
 
-        localDeleteButton.Enabled = True
+        localDeleteButton.Enabled = Not currentLocalConfig.isPreset
         localPlatformTextBox.ReadOnly = currentLocalConfig.isPreset
     End Sub
 
@@ -1459,7 +1549,9 @@ Public Class ConfigApiForm
         localEmbeddingModelCheckedListBox.Items.Clear()
         If currentLocalConfig Is Nothing Then Return
 
-        For Each model In currentLocalConfig.model
+        Dim sortedModels = SortModelsByVersion(currentLocalConfig.model)
+
+        For Each model In sortedModels
             If model.modelType = ModelType.Chat Then
                 localChatModelCheckedListBox.Items.Add(model, model.selected)
             ElseIf model.modelType = ModelType.Embedding Then
@@ -1649,9 +1741,12 @@ Public Class ConfigApiForm
     End Sub
 
     Private Sub LocalDeleteButton_Click(sender As Object, e As EventArgs)
-        If currentLocalConfig Is Nothing Then Return
+        If currentLocalConfig Is Nothing Then
+            GlobalStatusStripAll.ShowWarning("请先在列表中选择要删除的配置")
+            Return
+        End If
         If currentLocalConfig.isPreset Then
-            MessageBox.Show("预置配置不可删除", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            GlobalStatusStripAll.ShowWarning("预置配置不可删除")
             Return
         End If
 
@@ -1678,6 +1773,31 @@ Public Class ConfigApiForm
         ConfigData.Add(newConfig)
         localProviderListBox.Items.Add(newConfig)
         localProviderListBox.SelectedItem = newConfig
+    End Sub
+
+    Private Sub LocalAddModelButton_Click(sender As Object, e As EventArgs)
+        If currentLocalConfig Is Nothing Then Return
+
+        Dim modelName = InputBox("请输入模型名称：", "手动添加模型", "")
+        If String.IsNullOrWhiteSpace(modelName) Then Return
+
+        modelName = modelName.Trim()
+
+        Dim existing = currentLocalConfig.model.FirstOrDefault(Function(m) m.modelName = modelName)
+        If existing IsNot Nothing Then
+            MessageBox.Show("该模型已存在", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return
+        End If
+
+        currentLocalConfig.model.Add(New ConfigItemModel() With {
+            .modelName = modelName,
+            .displayName = modelName,
+            .modelType = ModelType.Chat
+        })
+
+        RefreshLocalModelLists()
+        SaveConfig()
+        MessageBox.Show($"已添加模型：{modelName}", "成功", MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
 #End Region
@@ -1720,6 +1840,68 @@ Public Class ConfigApiForm
             MessageBox.Show($"保存配置失败: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
+
+    ''' <summary>
+    ''' 按模型版本号对模型列表进行排序（版本号高的在前，无版本号按名称排序）
+    ''' </summary>
+    Private Function SortModelsByVersion(models As List(Of ConfigItemModel)) As List(Of ConfigItemModel)
+        If models Is Nothing Then Return New List(Of ConfigItemModel)()
+        Dim sorted = models.ToList()
+        sorted.Sort(New ModelVersionComparer())
+        Return sorted
+    End Function
+
+    ''' <summary>
+    ''' 模型版本号比较器：优先按名称中的数字版本号降序排列，无版本号按名称字母排序
+    ''' </summary>
+    Private Class ModelVersionComparer
+        Implements IComparer(Of ConfigItemModel)
+
+        Public Function Compare(x As ConfigItemModel, y As ConfigItemModel) As Integer Implements IComparer(Of ConfigItemModel).Compare
+            Dim nameX = If(String.IsNullOrEmpty(x.modelName), "", x.modelName)
+            Dim nameY = If(String.IsNullOrEmpty(y.modelName), "", y.modelName)
+
+            Dim verX = ExtractVersionNumbers(nameX)
+            Dim verY = ExtractVersionNumbers(nameY)
+
+            ' 两者都有版本号，按版本号降序比较
+            If verX.Count > 0 AndAlso verY.Count > 0 Then
+                For i = 0 To Math.Min(verX.Count, verY.Count) - 1
+                    If verX(i) <> verY(i) Then
+                        Return verY(i).CompareTo(verX(i))
+                    End If
+                Next
+                If verX.Count <> verY.Count Then
+                    Return verY.Count.CompareTo(verX.Count)
+                End If
+            ElseIf verX.Count > 0 Then
+                Return -1
+            ElseIf verY.Count > 0 Then
+                Return 1
+            End If
+
+            ' 无版本号，按名称字母升序排列
+            Return String.Compare(nameX, nameY, StringComparison.OrdinalIgnoreCase)
+        End Function
+
+        ''' <summary>
+        ''' 从模型名称中提取所有数字版本号（如 deepseek-v3->[3], glm-4-plus->[4], qwen2.5->[2.5], gemini-2.0->[2.0]）
+        ''' </summary>
+        Private Function ExtractVersionNumbers(name As String) As List(Of Double)
+            Dim versions As New List(Of Double)()
+            If String.IsNullOrEmpty(name) Then Return versions
+
+            Dim matches = System.Text.RegularExpressions.Regex.Matches(name, "\d+(?:\.\d+)*")
+            For Each match As System.Text.RegularExpressions.Match In matches
+                Dim value As Double = 0
+                If Double.TryParse(match.Value, Globalization.NumberStyles.Float, Globalization.CultureInfo.InvariantCulture, value) Then
+                    versions.Add(value)
+                End If
+            Next
+
+            Return versions
+        End Function
+    End Class
 
 #End Region
 

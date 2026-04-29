@@ -165,12 +165,21 @@ Public ReadOnly Property CurrentSessionId As String
             })
             ManageHistorySize()
 
-            ' 持久化到 conversation 表
-If role = "user" OrElse role = "assistant" Then
+            ' 持久化到 conversation 表（后台线程，避免阻塞UI）
+            If role = "user" OrElse role = "assistant" Then
                 Try
-                    ConversationRepository.InsertMessage(CurrentSessionId, role, content, False, CurrentAppType)
+                    Dim sid = CurrentSessionId
+                    Dim r = role
+                    Dim c = content
+                    Task.Run(Sub()
+                                 Try
+                                     ConversationRepository.InsertMessage(sid, r, c, False)
+                                 Catch ex As Exception
+                                     Debug.WriteLine("ConversationRepository.InsertMessage 后台写入失败: " & ex.Message)
+                                 End Try
+                             End Sub)
                 Catch ex As Exception
-                    Debug.WriteLine("ConversationRepository.InsertMessage 失败: " & ex.Message)
+                    Debug.WriteLine("ConversationRepository.InsertMessage 调度失败: " & ex.Message)
                 End Try
             End If
         End Sub
@@ -311,6 +320,40 @@ If role = "user" OrElse role = "assistant" Then
             If Not String.IsNullOrEmpty(mode) Then
                 _responseModeMap(responseUuid) = mode
             End If
+        End Sub
+
+        ''' <summary>
+        ''' 暴露内部字典供 BaseChatControl 做属性代理（只读引用，同一实例）
+        ''' </summary>
+        Public ReadOnly Property ResponseToRequestMap As Dictionary(Of String, String)
+            Get
+                Return _responseToRequestMap
+            End Get
+        End Property
+
+        Public ReadOnly Property ResponseModeMap As Dictionary(Of String, String)
+            Get
+                Return _responseModeMap
+            End Get
+        End Property
+
+        Public ReadOnly Property ResponseSelectionMap As Dictionary(Of String, SelectionInfo)
+            Get
+                Return _responseSelectionMap
+            End Get
+        End Property
+
+        Public ReadOnly Property SelectionPendingMap As Dictionary(Of String, SelectionInfo)
+            Get
+                Return _selectionPendingMap
+            End Get
+        End Property
+
+        ''' <summary>
+        ''' 设置待处理的选区信息（用于 BaseChatControl 在发送请求前绑定选区）
+        ''' </summary>
+        Public Sub SetPendingSelectionInfo(requestUuid As String, selInfo As SelectionInfo)
+            _selectionPendingMap(requestUuid) = selInfo
         End Sub
 
         ''' <summary>

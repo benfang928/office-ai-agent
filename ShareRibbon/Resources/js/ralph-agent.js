@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ralph-agent.js - Ralph Agent 前端控制
  * 类似Cursor的自动化Agent，嵌入聊天流，自动执行步骤
  */
@@ -133,6 +133,7 @@ function showAgentPlanCard(planData) {
                     <button class="agent-btn agent-btn-execute" onclick="confirmAgentExecution('${uuid}')">
                         ▶ 开始执行
                     </button>
+                    <button class="agent-btn agent-btn-refine" onclick="refineAgentPlan('${uuid}')">🔄 修改计划</button>
                     <button class="agent-btn agent-btn-abort" onclick="abortAgent('${uuid}')">
                         ✖ 取消
                     </button>
@@ -158,8 +159,7 @@ function showAgentPlanCard(planData) {
         chatContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
         window.ralphAgentState.session.uuid = uuid;
-        console.log('[RalphAgent] 显示规划卡片, uuid=' + uuid);
-    } catch (err) {
+        } catch (err) {
         console.error('showAgentPlanCard error:', err);
         unlockChatInput();
     }
@@ -169,7 +169,13 @@ function showAgentPlanCard(planData) {
  * 确认执行Agent
  */
 function confirmAgentExecution(uuid) {
-    // 隐藏按钮，显示执行中状态
+    // Immediately disable both buttons to prevent double-click
+    const executeBtn = document.querySelector(`[onclick="confirmAgentExecution('${uuid}')"]`);
+    const abortBtn = document.querySelector(`[onclick="abortAgent('${uuid}')"]`);
+    if (executeBtn) { executeBtn.disabled = true; executeBtn.textContent = '⏳ 执行中...'; }
+    if (abortBtn) { abortBtn.disabled = true; }
+
+    // 隐藏按钮，显示终止按钮
     const actions = document.getElementById('agent-actions-' + uuid);
     if (actions) {
         actions.innerHTML = `
@@ -178,14 +184,10 @@ function confirmAgentExecution(uuid) {
             </button>
         `;
     }
-    
+
     updateAgentStatus(uuid, 'running', '正在执行...');
-    
-    // 通知后端开始执行
-    sendMessageToServer({
-        type: 'startAgentExecution',
-        sessionId: uuid
-    });
+
+    sendMessageToServer({ type: 'startAgentExecution', sessionId: uuid });
 }
 
 /**
@@ -193,6 +195,15 @@ function confirmAgentExecution(uuid) {
  */
 function abortAgent(uuid) {
     updateAgentStatus(uuid, 'aborted', '已终止');
+    
+    // 更新操作按钮区域
+    const actions = document.getElementById('agent-actions-' + uuid);
+    if (actions) {
+        actions.innerHTML = `
+            <span class="agent-complete-text">⏹ 已终止</span>
+        `;
+    }
+    
     unlockChatInput();
     window.ralphAgentState.active = false;
     
@@ -201,6 +212,18 @@ function abortAgent(uuid) {
         type: 'abortAgent',
         sessionId: uuid
     });
+}
+
+/**
+ * 请求修改Agent计划
+ */
+function refineAgentPlan(uuid) {
+    const feedback = prompt('请说明对执行计划的修改意见（例如：步骤太多、方式不对、需要先备份等）:');
+    if (feedback && feedback.trim()) {
+        // Disable all buttons on the plan card
+        document.querySelectorAll('#agent-plan-' + uuid + ' .agent-btn').forEach(function(b) { b.disabled = true; });
+        sendMessageToServer({ type: 'refineAgentPlan', sessionId: uuid, feedback: feedback.trim() });
+    }
 }
 
 /**
@@ -394,8 +417,7 @@ function startAgentFromDialog() {
         type: 'startAgent',
         request: request
     });
-    console.log('[RalphAgent] 启动Agent，需求:', request);
-}
+    }
 
 // 导出函数
 window.showAgentInputDialog = showAgentInputDialog;
@@ -411,3 +433,4 @@ window.completeAgent = completeAgent;
 window.lockChatInput = lockChatInput;
 window.unlockChatInput = unlockChatInput;
 window.isAgentLocked = isAgentLocked;
+window.refineAgentPlan = refineAgentPlan;

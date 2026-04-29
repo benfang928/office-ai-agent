@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -23,7 +23,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>ShareRibbon.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42358,42356</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,7 +32,7 @@
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>ShareRibbon.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42358,42356</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -237,6 +237,7 @@
     <Compile Include="Config\SemanticMappingManager.vb" />
     <Compile Include="Services\Reformat\LegacyTemplateConverter.vb" />
     <Compile Include="Services\Reformat\SemanticRenderingEngine.vb" />
+    <Compile Include="Services\Reformat\FormatMirrorService.vb" />
     <Compile Include="Services\Reformat\SemanticPromptBuilder.vb" />
     <Compile Include="Services\Reformat\TaggingValidator.vb" />
     <Compile Include="Services\Reformat\StyleGuideConverter.vb" />
@@ -270,8 +271,16 @@
     <Compile Include="Loop\RalphLoopMemory.vb" />
     <Compile Include="Loop\RalphLoopController.vb" />
     <Compile Include="Loop\RalphAgentController.vb" />
+    <Compile Include="Agent\AgentKernel.vb" />
+    <Compile Include="Agent\LoopEngine.vb" />
+    <Compile Include="Agent\AgentSession.vb" />
+    <Compile Include="Agent\AgentMemory.vb" />
+    <Compile Include="Agent\SkillRegistry.vb" />
+    <Compile Include="Agent\ToolRegistry.vb" />
+    <Compile Include="Agent\PromptManager.vb" />
     <Compile Include="Config\WebView2Loader.vb" />
     <Compile Include="Config\SqliteAssemblyResolver.vb" />
+    <Compile Include="Config\PhaseStartupManager.vb" />
     <Compile Include="Config\SqliteNativeLoader.vb" />
     <Compile Include="Controls\BaseChatControl.Designer.vb">
       <DependentUpon>BaseChatControl.vb</DependentUpon>
@@ -361,7 +370,12 @@
     <Compile Include="Controls\Services\ChatContextBuilder.vb" />
     <Compile Include="Controls\Services\ChatStateService.vb" />
     <Compile Include="Controls\Services\UtilsService.vb" />
+    <Compile Include="Controls\Services\AutocompleteService.vb" />
+    <Compile Include="Controls\Services\ReformatService.vb" />
     <Compile Include="Controls\Services\HistoryService.vb" />
+    <Compile Include="Controls\Services\HistorySessionService.vb" />
+    <Compile Include="Controls\Services\AgentKernelService.vb" />
+    <Compile Include="Controls\Services\ContextRelevanceService.vb" />
     <Compile Include="Controls\Services\MemoryService.vb" />
     <Compile Include="Controls\Services\McpService.vb" />
     <Compile Include="Controls\Services\OfficeCompletionService.vb" />
@@ -372,6 +386,7 @@
     <Compile Include="Services\EmbeddingService.vb" />
     <Compile Include="Services\SkillsDirectoryService.vb" />
     <Compile Include="Services\SkillsService.vb" />
+    <Compile Include="Services\UnifiedMemoryService.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\BaseChatControl.resx">
@@ -462,6 +477,8 @@
     <None Include="Resources\js\intent-preview.js" />
     <None Include="Resources\js\ralph-loop.js" />
     <None Include="Resources\js\ralph-agent.js" />
+    <None Include="Resources\js\agent-protocol.js" />
+    <None Include="Resources\js\agent-card.js" />
     <None Include="Resources\js\autocomplete.js" />
     <None Include="Resources\js\model-switcher.js" />
     <None Include="Resources\js\reformat-template.js" />

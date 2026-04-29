@@ -1,4 +1,4 @@
-/**
+﻿/**
  * message-sender.js - Message Sending Logic
  * Handles sending messages to backend and managing input UI
  */
@@ -27,8 +27,6 @@ function sendChatMessage() {
     // 优先从smart-input获取内容，兼容隐藏的textarea
     const smartInput = document.getElementById('smart-input');
     const chatInput = document.getElementById('chat-input');
-    const chatModeSelect = document.getElementById('chatMode');
-    
     // 从smart-input获取用户输入
     let userTypedText = '';
     if (smartInput && smartInput.innerText) {
@@ -36,7 +34,7 @@ function sendChatMessage() {
     } else if (chatInput) {
         userTypedText = chatInput.value.trim();
     }
-    
+
     // 检测 /loop 命令 - 启动 Ralph Loop
     if (userTypedText.startsWith('/loop ')) {
         const loopGoal = userTypedText.substring(6).trim();
@@ -44,85 +42,18 @@ function sendChatMessage() {
             // 清空输入
             if (smartInput) smartInput.innerText = '';
             if (chatInput) chatInput.value = '';
-            
+
             // 发送启动循环消息
             sendMessageToServer({
                 type: 'startLoop',
                 goal: loopGoal
             });
-            console.log('[RalphLoop] 启动循环，目标:', loopGoal);
             return;
         }
     }
-    
-    // 检测是否为Agent模式
-    const chatMode = chatModeSelect ? chatModeSelect.value : 'chat';
+
     const attachedFileObjects = window.attachedFiles;
     const selectedSheetContent = window.getAllSelectedContent();
-    
-    if (chatMode === 'agent') {
-        // Agent模式：发送startAgent请求
-        if (userTypedText || attachedFileObjects.length > 0 || selectedSheetContent.length > 0) {
-            // 清空输入
-            if (smartInput) smartInput.innerText = '';
-            if (chatInput) chatInput.value = '';
-            
-            // 先显示用户消息
-            const uuid = generateUUID();
-            const now = new Date();
-            const timestamp = formatDateTime(now);
-            createChatSection('Me', timestamp, uuid);
-            const messageContentDiv = document.getElementById('content-' + uuid);
-            if (messageContentDiv) {
-                let htmlContent = '';
-                if (userTypedText) {
-                    htmlContent += marked.parse(userTypedText);
-                }
-                
-                // 添加选中内容引用
-                if (selectedSheetContent.length > 0) {
-                    let itemsHtml = selectedSheetContent.map(item => `<div>${item.sheetName}: ${item.address}</div>`).join('');
-                    htmlContent += `
-                        <div class="chat-message-references collapsed" id="msg-ref-sel-${uuid}">
-                            <div class="chat-message-reference-header" onclick="toggleChatMessageReference(this)">
-                                <span class="chat-message-reference-arrow">&#9658;</span>
-                                <span class="chat-message-reference-label">引用内容 (${selectedSheetContent.length})</span>
-                            </div>
-                            <div class="chat-message-reference-content">
-                                ${itemsHtml}
-                            </div>
-                        </div>`;
-                }
-                
-                // 添加文件引用
-                if (attachedFileObjects.length > 0) {
-                    let displayItemsHtml = attachedFileObjects.map(file => `<div>${escapeHtml(file.name)}</div>`).join('');
-                    htmlContent += `
-                        <div class="chat-message-references collapsed" id="msg-ref-file-${uuid}">
-                            <div class="chat-message-reference-header" onclick="toggleChatMessageReference(this)">
-                                <span class="chat-message-reference-arrow">&#9658;</span>
-                                <span class="chat-message-reference-label">引用文件 (${attachedFileObjects.length})</span>
-                            </div>
-                            <div class="chat-message-reference-content">
-                                ${displayItemsHtml}
-                            </div>
-                        </div>`;
-                }
-                
-                messageContentDiv.innerHTML = htmlContent;
-            }
-            
-            // 发送启动Agent消息（包含文件引用和选中内容）
-            sendMessageToServer({
-                type: 'startAgent',
-                request: userTypedText,
-                filePaths: attachedFileObjects.map(file => (file && typeof file.path === 'string' && file.path) ? file.path : file.name),
-                selectedContent: selectedSheetContent
-            });
-            console.log('[RalphAgent] 启动Agent，需求:', userTypedText, '文件数:', attachedFileObjects.length, '选中内容数:', selectedSheetContent.length);
-            return;
-        }
-    }
 
     // 检查是否处于续写模式
     if (window.continuationModeActive) {
@@ -514,7 +445,6 @@ function renderReferences() {
                 existingFile => existingFile.name === file.name && existingFile.size === file.size
             );
             if (isDuplicate) {
-                console.log(`文件已添加: ${file.name}`);
                 continue;
             }
             window.attachedFiles.push({
@@ -562,7 +492,6 @@ function addFilesFromDialog(files) {
 
             // 检查文件类型
             if (!allowedExtensions.exec(file.name)) {
-                console.log(`文件类型不支持: ${file.name}`);
                 return;
             }
 
@@ -571,7 +500,6 @@ function addFilesFromDialog(files) {
                 existingFile => existingFile.name === file.name && existingFile.path === file.path
             );
             if (isDuplicate) {
-                console.log(`文件已添加: ${file.name}`);
                 return;
             }
 
@@ -584,8 +512,7 @@ function addFilesFromDialog(files) {
         });
 
         renderReferences();
-        console.log(`通过对话框添加了 ${files.length} 个文件`);
-    } catch (err) {
+        } catch (err) {
         console.error('addFilesFromDialog error:', err);
     }
 }
@@ -630,7 +557,6 @@ function initDragDrop() {
 
             // 检查文件类型
             if (!allowedExtensions.exec(file.name)) {
-                console.log(`文件类型不支持: ${file.name}`);
                 continue;
             }
 
@@ -639,7 +565,6 @@ function initDragDrop() {
                 existingFile => existingFile.name === file.name
             );
             if (isDuplicate) {
-                console.log(`文件已添加: ${file.name}`);
                 continue;
             }
 
@@ -653,11 +578,9 @@ function initDragDrop() {
         }
 
         renderReferences();
-        console.log(`通过拖拽添加了 ${files.length} 个文件`);
-    });
+        });
 
-    console.log('拖拽功能已初始化');
-}
+    }
 
 // 在页面加载后初始化拖拽功能
 if (document.readyState === 'loading') {
@@ -772,8 +695,7 @@ function showDetectedIntent(intentType) {
             indicator.style.transform = 'translateY(-10px)';
         }, 3000);
 
-        console.log('显示意图: ' + label);
-    } catch (err) {
+        } catch (err) {
         console.error('showDetectedIntent error:', err);
     }
 }
